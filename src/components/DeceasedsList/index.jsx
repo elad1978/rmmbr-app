@@ -4,6 +4,7 @@ import Header from "../Header";
 import { useMemoryWallContext } from "../../contexts/MemoryWallContexts";
 import { deleteDataFromDatabase } from "../../services/apiFetcher";
 import "./index.css";
+import AddDeceasedCard from "../AddDeceasedCard";
 
 const DeceasedsList = ({
   role,
@@ -16,6 +17,11 @@ const DeceasedsList = ({
   const memoryWall = memoryWalls[index];
   const [deceasedsInfo, setDeceasedsInfo] = useState(memoryWall.deceasedsInfo);
   const ratingTypes = memoryWalls[index].ratingTypes;
+  //console.log(memoryWallId);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   const deleteDeceasedCard = async (deceasedId) => {
     const endpoint = `http://localhost:3000/api/getMemoryWallById/${memoryWallId}/deceasedsInfo/${deceasedId}/`;
@@ -63,12 +69,18 @@ const DeceasedsList = ({
         {role === "admin" ||
         (role === "partialAccess" &&
           wallPermissions.find((id) => id == memoryWallId)) ? (
-          <button className="deceaseds-plus-btn">
+          <button className="deceaseds-plus-btn" onClick={handleOpenModal}>
             <div className="deceaseds-plus-btn-text">הוספת נפטר</div>
             <span className="deceaseds-plus-span">+</span>
           </button>
         ) : null}
       </div>
+      {showModal && (
+        <AddDeceasedCard
+          handleClose={handleCloseModal}
+          memoryWallId={memoryWallId}
+        />
+      )}
 
       <div>
         {deceasedsFirstPlace.length != 0 ? (

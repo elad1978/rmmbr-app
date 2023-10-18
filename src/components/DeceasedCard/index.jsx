@@ -69,6 +69,9 @@ const DeceasedCard = ({
           index={index}
           dIndex={dIndex}
           updateCard={updateCard}
+          hight={"15rem"}
+          width={"11rem"}
+          isNewCard={false}
         />
       ) : (
         <Link
