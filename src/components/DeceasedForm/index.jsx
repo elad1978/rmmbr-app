@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Button } from "react-bootstrap";
 import {
   updateDataInDatabase,
-  postDataToDatabase,
+  postDataWithFileToDatabase,
 } from "../../services/apiFetcher";
 import { useMemoryWallContext } from "../../contexts/MemoryWallContexts";
 import "./index.css";
@@ -49,7 +49,7 @@ const DeceasedForm = ({
   console.log(memoryWalls[memoryWallId]);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(data.imgPath);
     const endpoint = `http://localhost:3000/api/getMemoryWallById/${memoryWallId}/deceasedsInfo/${
       !isNewCard ? deceased.id : ""
     }`;
@@ -58,20 +58,32 @@ const DeceasedForm = ({
       imgPath: data.imgPath,
       donationAmount: data.donationAmount,
     };
-    console.log(newData);
+    console.log(newData.imgPath);
     try {
       if (!isNewCard) {
         const updatedData = await updateDataInDatabase(endpoint, newData);
         console.log("Data updated successfully:", updatedData);
         updateCard(updatedData);
-        onCancel();
+        // } else {
+        //   const newCardData = await postDataToDatabase(endpoint, newData);
+        //   console.log("Data was added successfully:", newCardData);
+        // }
       } else {
-        const newCardData = await postDataToDatabase(endpoint, newData);
+        const newCardData = await postDataWithFileToDatabase(
+          endpoint,
+          {
+            name: newData.name,
+            donationAmount: newData.donationAmount,
+          },
+          newData.imgPath
+        );
         console.log("Data was added successfully:", newCardData);
       }
     } catch (error) {
       console.error("Error updating data:", error.message);
+      //console.log(newCardData);
     }
+    onCancel();
   };
 
   return (
@@ -99,7 +111,7 @@ const DeceasedForm = ({
           <Form.Text className="text-danger">{errors.name?.message}</Form.Text>
         </Form.Group>
 
-        {/* <Form.Group
+        <Form.Group
           className="background-color-my-gray"
           controlId="formImagePath"
         >
@@ -109,20 +121,29 @@ const DeceasedForm = ({
             control={control}
             defaultValue=""
             render={({ field }) => (
+              // <Form.Control
+              //   type="file"
+              //   {...field}
+              //   accept=".jpg, .jpeg, .png"
+              //   className="form-control-sm"
+              // />
               <Form.Control
                 type="file"
-                {...field}
-                accept=".jpg, .jpeg, .png"
                 className="form-control-sm"
+                accept=".jpg, .jpeg, .png"
+                onChange={(e) => {
+                  // Set the file value manually
+                  field.onChange(e.target.files[0]);
+                }}
               />
             )}
           />
           <Form.Text className="text-danger">
             {errors.imgPath?.message}
           </Form.Text>
-        </Form.Group> */}
+        </Form.Group>
 
-        <Form.Group
+        {/* <Form.Group
           className="background-color-my-gray"
           controlId="formImagePath"
         >
@@ -138,7 +159,7 @@ const DeceasedForm = ({
           <Form.Text className="text-danger">
             {errors.imgPath?.message}
           </Form.Text>
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group
           className="background-color-my-gray"

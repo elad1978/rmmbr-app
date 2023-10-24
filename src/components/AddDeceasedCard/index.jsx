@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import DeceasedForm from "../DeceasedForm";
 
-function AddDeceasedCard({ handleClose, memoryWallId }) {
+function AddDeceasedCard({ handleClose, memoryWallId, onCancel }) {
   const [show, setShow] = useState(true);
   console.log(memoryWallId);
   return (
@@ -15,16 +15,20 @@ function AddDeceasedCard({ handleClose, memoryWallId }) {
         show={show}
         onHide={handleClose}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>כותרת Modal</Modal.Title>
+        <Modal.Header closeButton={false}>
+          <Modal.Title className="modal-title">הוספת כרטיס חדש</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <DeceasedForm isNewCard={true} memoryWallId={memoryWallId} />
+          <DeceasedForm
+            isNewCard={true}
+            memoryWallId={memoryWallId}
+            onCancel={onCancel}
+          />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          {/* <Button variant="secondary" onClick={handleClose}>
             סגור
-          </Button>
+          </Button> */}
           {/* <Button variant="primary" onClick={handleClose}>
             שמור שינויים
           </Button> */}

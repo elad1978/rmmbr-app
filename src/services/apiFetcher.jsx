@@ -10,7 +10,7 @@ export async function fetchDataFromDatabase(endpoint) {
     throw new Error(`Error fetching data from ${endpoint}: ${error.message}`);
   }
 }
-//post
+//post-regular
 export async function postDataToDatabase(endpoint, dataToSend) {
   try {
     const response = await axios.post(endpoint, dataToSend);
@@ -19,6 +19,29 @@ export async function postDataToDatabase(endpoint, dataToSend) {
     throw new Error(`Error posting data to ${endpoint}: ${error.message}`);
   }
 }
+
+// post-with-file
+export async function postDataWithFileToDatabase(endpoint, dataToSend, file) {
+  try {
+    const formData = new FormData();
+
+    formData.append("name", dataToSend.name);
+    formData.append("donationAmount", dataToSend.donationAmount);
+    formData.append("imgPath", file);
+    console.log(formData);
+    const headers = {
+      "Content-Type": "multipart/form-data", // Use 'multipart/form-data' when sending files
+      // Add other headers if needed, for example:
+      // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+    };
+    console.log(formData);
+    const response = await axios.post(endpoint, formData, { headers });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error posting data to ${endpoint}: ${error.message}`);
+  }
+}
+
 //put
 export async function updateDataInDatabase(endpoint, dataToUpdate) {
   try {

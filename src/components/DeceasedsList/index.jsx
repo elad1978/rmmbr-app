@@ -70,7 +70,7 @@ const DeceasedsList = ({
         (role === "partialAccess" &&
           wallPermissions.find((id) => id == memoryWallId)) ? (
           <button className="deceaseds-plus-btn" onClick={handleOpenModal}>
-            <div className="deceaseds-plus-btn-text">הוספת נפטר</div>
+            <div className="deceaseds-plus-btn-text">הוספת כרטיס</div>
             <span className="deceaseds-plus-span">+</span>
           </button>
         ) : null}
@@ -79,6 +79,7 @@ const DeceasedsList = ({
         <AddDeceasedCard
           handleClose={handleCloseModal}
           memoryWallId={memoryWallId}
+          onCancel={() => setShowModal(false)}
         />
       )}
 
