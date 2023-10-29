@@ -35,6 +35,7 @@ const DeceasedForm = ({
   hight,
   width,
   isNewCard,
+  addNewDeceasedCardToMemoryWall,
 }) => {
   const { memoryWalls, setMemoryWalls } = useMemoryWallContext();
   // const [newId,setNewId]=useState(memoryWalls[memoryWallId].deceasedsInfo.length)
@@ -46,7 +47,7 @@ const DeceasedForm = ({
     resolver: yupResolver(schema),
   });
 
-  console.log(memoryWalls[memoryWallId]);
+  // console.log(memoryWalls[memoryWallId]);
 
   const onSubmit = async (data) => {
     console.log(data.imgPath);
@@ -64,10 +65,6 @@ const DeceasedForm = ({
         const updatedData = await updateDataInDatabase(endpoint, newData);
         console.log("Data updated successfully:", updatedData);
         updateCard(updatedData);
-        // } else {
-        //   const newCardData = await postDataToDatabase(endpoint, newData);
-        //   console.log("Data was added successfully:", newCardData);
-        // }
       } else {
         const newCardData = await postDataWithFileToDatabase(
           endpoint,
@@ -78,6 +75,8 @@ const DeceasedForm = ({
           newData.imgPath
         );
         console.log("Data was added successfully:", newCardData);
+        // addNewDeceasedCardToMemoryWall(newCardData, memoryWallId, index, dIndex);
+        addNewDeceasedCardToMemoryWall(newCardData.newDeceased);
       }
     } catch (error) {
       console.error("Error updating data:", error.message);

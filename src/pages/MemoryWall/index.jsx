@@ -21,6 +21,7 @@ const MemoryWall = () => {
   const isAuthenticated = useIsAuthenticated();
   const authUser = useAuthUser();
   const { memoryWalls, setMemoryWalls } = useMemoryWallContext();
+  console.log(memoryWalls);
   const [refresh, setRefresh] = useState(false);
 
   const location = useLocation();
@@ -41,6 +42,10 @@ const MemoryWall = () => {
     memoryWall.highlightsNews
   );
 
+  const [deceasedsInfo, setDeceasedsInfo] = useState(memoryWall.deceasedsInfo);
+  console.log(deceasedsInfo);
+  console.log(memoryWalls);
+
   const [isOpenTitleInput, setIsOpenTitleInput] = useState(false);
   const [isOpenAboutInput, setIsOpenAboutInput] = useState(false);
 
@@ -51,6 +56,24 @@ const MemoryWall = () => {
     memoryWalls[index].highlightsNews = updateHighlight;
     setMemoryWalls(memoryWalls);
   };
+
+  const addNewDeceasedCardToMemoryWall = (newDeceased) => {
+    console.log(newDeceased);
+    const updateDeceasedsInfo = [...deceasedsInfo, newDeceased];
+    setDeceasedsInfo(updateDeceasedsInfo);
+    //setDeceasedsInfo([...deceasedsInfo, newDeceased]);
+
+    // setRefresh((prevRefresh) => !prevRefresh);
+
+    memoryWalls[index].deceasedsInfo = updateDeceasedsInfo;
+    setMemoryWalls(memoryWalls);
+  };
+
+  // useEffect(() => {
+  //   setHighlightsNews(memoryWall.highlightsNews);
+  //   setDeceasedsInfo(memoryWall.deceasedsInfo);
+  //   setRefresh((prevRefresh) => !prevRefresh);
+  // }, [memoryWall, deceasedsInfo]);
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -129,7 +152,6 @@ const MemoryWall = () => {
                 </div>
               )}
             </div>
-
             <VisualUpdatesSlider sliderUpdates={memoryWall.sliderUpdates} />
             {isOpenAboutInput ? (
               <UpdateAboutForm
@@ -168,7 +190,9 @@ const MemoryWall = () => {
                 )}
               </div>
             )}
-
+            {/* {memoryWalls[index].DeceasedsList.map((d) => (
+              <div>{d.name}</div>
+            ))} */}
             <DeceasedsList
               deceasedsInfo={memoryWall.deceasedsInfo}
               ratingTypes={memoryWall.ratingTypes}
@@ -177,6 +201,7 @@ const MemoryWall = () => {
               memoryWallId={memoryWall.id}
               index={index}
               handleRefresh={handleRefresh}
+              addNewDeceasedCardToMemoryWall={addNewDeceasedCardToMemoryWall}
             />
           </Col>
           <Col xs={12} md={4} lg={4} xl={3}>

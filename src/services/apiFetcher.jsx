@@ -24,11 +24,9 @@ export async function postDataToDatabase(endpoint, dataToSend) {
 export async function postDataWithFileToDatabase(endpoint, dataToSend, file) {
   try {
     const formData = new FormData();
-
     formData.append("name", dataToSend.name);
     formData.append("donationAmount", dataToSend.donationAmount);
     formData.append("imgPath", file);
-    console.log(formData);
     const headers = {
       "Content-Type": "multipart/form-data", // Use 'multipart/form-data' when sending files
       // Add other headers if needed, for example:

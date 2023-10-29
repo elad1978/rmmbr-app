@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { fetchDataFromDatabase } from "../services/apiFetcher.jsx";
 
-const memoryWallContext = createContext();
+const memoryWallContext = createContext(null);
 
 export function useMemoryWallContext() {
   return useContext(memoryWallContext);

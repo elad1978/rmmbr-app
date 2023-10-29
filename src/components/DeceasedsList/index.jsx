@@ -12,10 +12,12 @@ const DeceasedsList = ({
   memoryWallId,
   index,
   handleRefresh,
+  addNewDeceasedCardToMemoryWall,
 }) => {
   const { memoryWalls, setMemoryWalls } = useMemoryWallContext();
-  const memoryWall = memoryWalls[index];
-  const [deceasedsInfo, setDeceasedsInfo] = useState(memoryWall.deceasedsInfo);
+  // const memoryWall = memoryWalls[index];
+  // const [deceasedsInfo, setDeceasedsInfo] = useState(memoryWall.deceasedsInfo);
+
   const ratingTypes = memoryWalls[index].ratingTypes;
   //console.log(memoryWallId);
   const [showModal, setShowModal] = useState(false);
@@ -27,9 +29,10 @@ const DeceasedsList = ({
     const endpoint = `http://localhost:3000/api/getMemoryWallById/${memoryWallId}/deceasedsInfo/${deceasedId}/`;
     try {
       const newDeceasedList = await deleteDataFromDatabase(endpoint);
-      setDeceasedsInfo(newDeceasedList);
+      // setDeceasedsInfo(newDeceasedList);
       //memoryWalls[memoryWallId].deceasedsInfo = newDeceasedList;
       //setMemoryWalls(memoryWalls);
+
       setMemoryWalls((prevState) => {
         const newState = [...prevState];
         newState[index].deceasedsInfo = newDeceasedList;
@@ -49,15 +52,15 @@ const DeceasedsList = ({
   // };
   // useEffect(() => {}, [deceasedsInfo, memoryWalls]);
 
-  const deceasedsFirstPlace = deceasedsInfo.filter(
+  const deceasedsFirstPlace = memoryWalls[index].deceasedsInfo.filter(
     (d) => d.donationAmount >= ratingTypes.firstPlace.minAmount
   );
-  const deceasedsSecondPlace = deceasedsInfo.filter(
+  const deceasedsSecondPlace = memoryWalls[index].deceasedsInfo.filter(
     (d) =>
       d.donationAmount >= ratingTypes.secondPlace.minAmount &&
       d.donationAmount < ratingTypes.firstPlace.minAmount
   );
-  const deceasedsThirdPlace = deceasedsInfo.filter(
+  const deceasedsThirdPlace = memoryWalls[index].deceasedsInfo.filter(
     (d) =>
       d.donationAmount >= ratingTypes.thirdPlace.minAmount &&
       d.donationAmount < ratingTypes.secondPlace.minAmount
@@ -80,6 +83,7 @@ const DeceasedsList = ({
           handleClose={handleCloseModal}
           memoryWallId={memoryWallId}
           onCancel={() => setShowModal(false)}
+          addNewDeceasedCardToMemoryWall={addNewDeceasedCardToMemoryWall}
         />
       )}
 

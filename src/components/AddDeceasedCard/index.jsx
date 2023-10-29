@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import DeceasedForm from "../DeceasedForm";
 
-function AddDeceasedCard({ handleClose, memoryWallId, onCancel }) {
+function AddDeceasedCard({
+  handleClose,
+  memoryWallId,
+  onCancel,
+  addNewDeceasedCardToMemoryWall,
+}) {
   const [show, setShow] = useState(true);
   console.log(memoryWallId);
   return (
@@ -23,6 +28,7 @@ function AddDeceasedCard({ handleClose, memoryWallId, onCancel }) {
             isNewCard={true}
             memoryWallId={memoryWallId}
             onCancel={onCancel}
+            addNewDeceasedCardToMemoryWall={addNewDeceasedCardToMemoryWall}
           />
         </Modal.Body>
         <Modal.Footer>

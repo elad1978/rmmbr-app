@@ -54,10 +54,7 @@ const DeceasedCard = ({
         return memoryWall;
       })
     );
-    //handleRefresh(memoryWalls[memoryWallId]);
-    window.location.href = window.location.href; //אם תמצא אפשרות יותר טובה תגיד לי(בלי שזה ירפרש את הדף)
   };
-  //useEffect(() => {}, [cardData]);
 
   return (
     <div className="deceased-card-style">
