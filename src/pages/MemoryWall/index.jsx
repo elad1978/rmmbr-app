@@ -29,12 +29,12 @@ const MemoryWall = () => {
   const index = location.state?.index;
   const memoryWall = memoryWalls[index];
 
-  const handleRefresh = (data) => {
-    console.log("Refreshing...");
-    // console.log(memoryWall);
-    // setMemoryWall(data);
-    // setRefresh((prevRefresh) => !prevRefresh);
-  };
+  // const handleRefresh = (data) => {
+  //   console.log("Refreshing...");
+  //   console.log(memoryWall);
+  //   setMemoryWall(data);
+  //   setRefresh((prevRefresh) => !prevRefresh);
+  // };
 
   const [role, setRole] = useState("noRole");
   const [wallPermissions, setWallPermissions] = useState("noPermissions");
@@ -61,10 +61,6 @@ const MemoryWall = () => {
     console.log(newDeceased);
     const updateDeceasedsInfo = [...deceasedsInfo, newDeceased];
     setDeceasedsInfo(updateDeceasedsInfo);
-    //setDeceasedsInfo([...deceasedsInfo, newDeceased]);
-
-    // setRefresh((prevRefresh) => !prevRefresh);
-
     memoryWalls[index].deceasedsInfo = updateDeceasedsInfo;
     setMemoryWalls(memoryWalls);
   };
@@ -200,7 +196,7 @@ const MemoryWall = () => {
               wallPermissions={wallPermissions}
               memoryWallId={memoryWall.id}
               index={index}
-              handleRefresh={handleRefresh}
+              // handleRefresh={handleRefresh}
               addNewDeceasedCardToMemoryWall={addNewDeceasedCardToMemoryWall}
             />
           </Col>

@@ -8,7 +8,8 @@ const DeceasedDetails = () => {
   return (
     <>
       <h1>DonorDetails</h1>
-      <h3>{deceased.name}</h3>
+      <h3>{deceased.name}:שם</h3>
+      <h3>{deceased.donationAmount} :סכום תרומה</h3>
     </>
   );
 };

@@ -11,7 +11,7 @@ const DeceasedsList = ({
   wallPermissions,
   memoryWallId,
   index,
-  handleRefresh,
+  // handleRefresh,
   addNewDeceasedCardToMemoryWall,
 }) => {
   const { memoryWalls, setMemoryWalls } = useMemoryWallContext();
@@ -106,7 +106,7 @@ const DeceasedsList = ({
             deleteDeceasedCard={deleteDeceasedCard}
             index={index}
             dIndex={dIndex}
-            handleRefresh={handleRefresh}
+            // handleRefresh={handleRefresh}
           />
         ))}
       </div>
@@ -129,7 +129,7 @@ const DeceasedsList = ({
             deleteDeceasedCard={deleteDeceasedCard}
             index={index}
             dIndex={dIndex}
-            handleRefresh={handleRefresh}
+            // handleRefresh={handleRefresh}
           />
         ))}
       </div>
@@ -153,7 +153,7 @@ const DeceasedsList = ({
           deleteDeceasedCard={deleteDeceasedCard}
           index={index}
           dIndex={dIndex}
-          handleRefresh={handleRefresh}
+          // handleRefresh={handleRefresh}
         />
       ))}
     </div>

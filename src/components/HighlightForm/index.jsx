@@ -6,18 +6,18 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap"; // Import R
 import { useState } from "react";
 import { useMemoryWallContext } from "../../contexts/MemoryWallContexts";
 import "./index.css";
-import { postDataToDatabase } from "../../services/apiFetcher.jsx";
+import { postDataWithFileToDatabase } from "../../services/apiFetcher.jsx";
 
 const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
   const schema = Yup.object().shape({
     date: Yup.date().required("שדה תאריך הוא שדה חובה"),
     title: Yup.string().required("שדה כותרת הוא שדה חובה"),
-    text: Yup.string().required("שדה טקסט הוא שדה חובה"),
-    image: Yup.string().required("שדה תמונה הוא שדה חובה"),
+    text: Yup.string(),
+    image: Yup.mixed(),
   });
 
   const { memoryWalls } = useMemoryWallContext();
-  const highlightsNews = memoryWalls[index].highlightsNews;
+  // const highlightsNews = memoryWalls[index].highlightsNews;
 
   const {
     handleSubmit,
@@ -34,29 +34,26 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
     },
   });
 
-  //temp
-  const [highlightTempId, setHighlightTempId] = useState(
-    highlightsNews.length + 1
-  );
-
-  const handleFormSubmit = (data) => {
-    setHighlightTempId(highlightTempId + 1);
-    const newHighlight = {
-      id: highlightTempId.toString(),
-      title: data.title,
-      text: data.text,
-      image: data.image,
-      date: new Date(data.date).toLocaleDateString(),
-    };
+  const handleFormSubmit = async (data) => {
+    console.log("dataaaaaaa: ", data);
+    // const newHighlight = {
+    //   title: data.title,
+    //   text: data.text,
+    //   image: data.image,
+    //   date: new Date(data.date).toLocaleDateString(),
+    // };
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("text", data.text);
+    formData.append("date", new Date(data.date).toLocaleDateString());
+    formData.append("img", data.image);
+    console.log(data.image);
     const endpoint = `http://localhost:3000/api/getMemoryWallById/${memoryWallId}/highlightsNews`;
-    postDataToDatabase(endpoint, newHighlight)
-      .then((responseData) => {
-        console.log("Data successfully sended", responseData);
-      })
-      .catch((error) => {
-        console.error("There was an error sending the data", error);
-      });
-    onAddHighlight(newHighlight);
+    const newHighlightData = await postDataWithFileToDatabase(
+      endpoint,
+      formData
+    );
+    onAddHighlight(newHighlightData);
     reset();
   };
 
@@ -129,7 +126,7 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
               )}
             </Form.Group>
 
-            <Form.Group controlId="image" className="bg-and-font-color">
+            {/* <Form.Group controlId="image" className="bg-and-font-color">
               <Form.Label className="bg-and-font-color">:תמונה</Form.Label>
               <Controller
                 name="image"
@@ -149,6 +146,30 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
                   </div>
                 )}
               />
+            </Form.Group> */}
+
+            <Form.Group controlId="image" className="bg-and-font-color">
+              <Form.Label className="bg-and-font-color">:תמונה</Form.Label>
+              <Controller
+                name="image"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <Form.Control
+                    type="file"
+                    accept=".jpg, .jpeg, .png"
+                    onChange={(e) => {
+                      // Set the file value manually
+                      field.onChange(e.target.files[0]);
+                    }}
+                  />
+                )}
+              />
+              {errors.image && (
+                <Form.Control.Feedback type="invalid">
+                  {errors.image.message}
+                </Form.Control.Feedback>
+              )}
             </Form.Group>
 
             <Button

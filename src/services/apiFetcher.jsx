@@ -21,19 +21,19 @@ export async function postDataToDatabase(endpoint, dataToSend) {
 }
 
 // post-with-file
-export async function postDataWithFileToDatabase(endpoint, dataToSend, file) {
+export async function postDataWithFileToDatabase(endpoint, dataToSend) {
   try {
-    const formData = new FormData();
-    formData.append("name", dataToSend.name);
-    formData.append("donationAmount", dataToSend.donationAmount);
-    formData.append("imgPath", file);
+    // const formData = new FormData();
+    // formData.append("name", dataToSend.name);
+    // formData.append("donationAmount", dataToSend.donationAmount);
+    // formData.append("imgPath", file);
     const headers = {
       "Content-Type": "multipart/form-data", // Use 'multipart/form-data' when sending files
       // Add other headers if needed, for example:
       // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
     };
-    console.log(formData);
-    const response = await axios.post(endpoint, formData, { headers });
+    console.log(dataToSend);
+    const response = await axios.post(endpoint, dataToSend, { headers });
     return response.data;
   } catch (error) {
     throw new Error(`Error posting data to ${endpoint}: ${error.message}`);

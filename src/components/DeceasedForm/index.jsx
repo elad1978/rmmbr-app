@@ -12,7 +12,7 @@ import "./index.css";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
-  imgPath: yup.mixed().required("Image is required"),
+  imgPath: yup.mixed(),
   donationAmount: yup
     .number()
     .typeError("Donation amount must be a number")
@@ -66,13 +66,13 @@ const DeceasedForm = ({
         console.log("Data updated successfully:", updatedData);
         updateCard(updatedData);
       } else {
+        const formData = new FormData();
+        formData.append("name", newData.name);
+        formData.append("donationAmount", newData.donationAmount);
+        formData.append("imgPath", newData.imgPath);
         const newCardData = await postDataWithFileToDatabase(
           endpoint,
-          {
-            name: newData.name,
-            donationAmount: newData.donationAmount,
-          },
-          newData.imgPath
+          formData
         );
         console.log("Data was added successfully:", newCardData);
         // addNewDeceasedCardToMemoryWall(newCardData, memoryWallId, index, dIndex);
