@@ -50,6 +50,21 @@ export async function updateDataInDatabase(endpoint, dataToUpdate) {
   }
 }
 
+export async function putDataWithFileToDatabase(endpoint, dataToSend) {
+  try {
+    const headers = {
+      "Content-Type": "multipart/form-data", // Use 'multipart/form-data' when sending files
+      // Add other headers if needed, for example:
+      // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+    };
+    console.log(dataToSend);
+    const response = await axios.put(endpoint, dataToSend, { headers });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error putting data to ${endpoint}: ${error.message}`);
+  }
+}
+
 //delete
 
 export async function deleteDataFromDatabase(endpoint) {

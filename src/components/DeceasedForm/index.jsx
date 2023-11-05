@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Button } from "react-bootstrap";
 import {
   updateDataInDatabase,
+  putDataWithFileToDatabase,
   postDataWithFileToDatabase,
 } from "../../services/apiFetcher";
 import { useMemoryWallContext } from "../../contexts/MemoryWallContexts";
@@ -54,22 +55,17 @@ const DeceasedForm = ({
     const endpoint = `http://localhost:3000/api/getMemoryWallById/${memoryWallId}/deceasedsInfo/${
       !isNewCard ? deceased.id : ""
     }`;
-    let newData = {
-      name: data.name,
-      imgPath: data.imgPath,
-      donationAmount: data.donationAmount,
-    };
-    console.log(newData.imgPath);
+    console.log(data.imgPath);
     try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("donationAmount", data.donationAmount);
+      formData.append("imgPath", data.imgPath);
       if (!isNewCard) {
-        const updatedData = await updateDataInDatabase(endpoint, newData);
+        const updatedData = await putDataWithFileToDatabase(endpoint, formData);
         console.log("Data updated successfully:", updatedData);
         updateCard(updatedData);
       } else {
-        const formData = new FormData();
-        formData.append("name", newData.name);
-        formData.append("donationAmount", newData.donationAmount);
-        formData.append("imgPath", newData.imgPath);
         const newCardData = await postDataWithFileToDatabase(
           endpoint,
           formData
@@ -120,12 +116,6 @@ const DeceasedForm = ({
             control={control}
             defaultValue=""
             render={({ field }) => (
-              // <Form.Control
-              //   type="file"
-              //   {...field}
-              //   accept=".jpg, .jpeg, .png"
-              //   className="form-control-sm"
-              // />
               <Form.Control
                 type="file"
                 className="form-control-sm"
