@@ -39,6 +39,7 @@ const HighlightsBar = ({
           // highLightUpdate={highLightUpdate}
           onAddHighlight={onAddHighlight}
           index={index}
+          toggleFormVisibility={toggleFormVisibility}
         />
       )}
 

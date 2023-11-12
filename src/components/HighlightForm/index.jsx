@@ -4,11 +4,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Form, Button, Container, Row, Col } from "react-bootstrap"; // Import React Bootstrap components
 import { useState } from "react";
-import { useMemoryWallContext } from "../../contexts/MemoryWallContexts";
+// import { useMemoryWallContext } from "../../contexts/MemoryWallContexts";
 import "./index.css";
 import { postDataWithFileToDatabase } from "../../services/apiFetcher.jsx";
 
-const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
+const HighlightForm = ({
+  onAddHighlight,
+  memoryWallId,
+  toggleFormVisibility,
+}) => {
   const schema = Yup.object().shape({
     date: Yup.date().required("שדה תאריך הוא שדה חובה"),
     title: Yup.string().required("שדה כותרת הוא שדה חובה"),
@@ -16,7 +20,7 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
     image: Yup.mixed(),
   });
 
-  const { memoryWalls } = useMemoryWallContext();
+  // const { memoryWalls } = useMemoryWallContext();
   // const highlightsNews = memoryWalls[index].highlightsNews;
 
   const {
@@ -35,19 +39,12 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
   });
 
   const handleFormSubmit = async (data) => {
-    console.log("dataaaaaaa: ", data);
-    // const newHighlight = {
-    //   title: data.title,
-    //   text: data.text,
-    //   image: data.image,
-    //   date: new Date(data.date).toLocaleDateString(),
-    // };
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("text", data.text);
     formData.append("date", new Date(data.date).toLocaleDateString());
     formData.append("img", data.image);
-    console.log(data.image);
+    // console.log(data.image);
     const endpoint = `http://localhost:3000/api/getMemoryWallById/${memoryWallId}/highlightsNews`;
     const newHighlightData = await postDataWithFileToDatabase(
       endpoint,
@@ -55,6 +52,7 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
     );
     onAddHighlight(newHighlightData);
     reset();
+    toggleFormVisibility();
   };
 
   return (
@@ -125,28 +123,6 @@ const HighlightForm = ({ onAddHighlight, memoryWallId, index }) => {
                 </Form.Control.Feedback>
               )}
             </Form.Group>
-
-            {/* <Form.Group controlId="image" className="bg-and-font-color">
-              <Form.Label className="bg-and-font-color">:תמונה</Form.Label>
-              <Controller
-                name="image"
-                control={control}
-                render={({ field }) => (
-                  <div>
-                    <Form.Control
-                      type="text"
-                      {...field}
-                      isInvalid={!!errors.image}
-                    />
-                    {errors.image && (
-                      <Form.Control.Feedback type="invalid">
-                        {errors.image.message}
-                      </Form.Control.Feedback>
-                    )}
-                  </div>
-                )}
-              />
-            </Form.Group> */}
 
             <Form.Group controlId="image" className="bg-and-font-color">
               <Form.Label className="bg-and-font-color">:תמונה</Form.Label>

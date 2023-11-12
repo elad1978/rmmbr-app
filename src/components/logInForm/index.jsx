@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { useSignIn } from "react-auth-kit";
+import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 //import { users } from "../../assets/DB"; //temporary - DB
+import { postDataToDatabase } from "../../services/apiFetcher.jsx";
 import { useUsersContext } from "../../contexts/UsersContext.jsx";
 
 const schema = yup.object().shape({
@@ -15,7 +16,7 @@ const schema = yup.object().shape({
     .min(4, " סיסמה חייבת להיות לפחות 4 תווים"),
 });
 
-const LogInForm = () => {
+const LogInForm = ({ handleModalClose }) => {
   const signIn = useSignIn();
   const {
     register,
@@ -27,25 +28,53 @@ const LogInForm = () => {
 
   const { users } = useUsersContext();
 
-  const onSubmit = (data) => {
-    const dbUserData = users.find(
-      (user) => user.email === data.email && user.password === data.password
-    );
+  // const onSubmit = (data) => {
+  //   const dbUserData = users.find(
+  //     (user) => user.email === data.email && user.password === data.password
+  //   );
+  //   signIn({
+  //     expiresIn: null, // don`t really supposed to be null - just fot checking
+  //     // given_name: userData.data.given_name,
+  //     tokenType: "Bearer",
+  //     token: null, // don`t really supposed to be null - just fot checking
+  //     authState: {
+  //       email: dbUserData.email,
+  //       name: dbUserData.name,
+  //       //imgPath: userData.data.picture,
+  //       id: dbUserData.id,
+  //       connectionType: "registered",
+  //       role: dbUserData.role,
+  //       permissions: dbUserData.permissions,
+  //     },
+  //   });
+  //   handleModalClose();
+  // };
+  // const isAuthenticated = useIsAuthenticated();
+  // console.log(isAuthenticated());
+  const onSubmit = async (data) => {
+    const endpoint = `http://localhost:3000/api/login`;
+    const dataToUpdate = {
+      email: data.email,
+      password: data.password,
+    };
+    const dbUserData = await postDataToDatabase(endpoint, dataToUpdate);
+
     signIn({
-      expiresIn: null, // don`t really supposed to be null - just fot checking
+      expiresIn: dbUserData.expiresIn, // just fot checking
       // given_name: userData.data.given_name,
       tokenType: "Bearer",
-      token: null, // don`t really supposed to be null - just fot checking
+      token: dbUserData.token, // don`t really supposed to be null - just fot checking
       authState: {
-        email: dbUserData.email,
-        name: dbUserData.name,
-        //imgPath: userData.data.picture,
-        id: dbUserData.id,
+        email: dbUserData.user.email,
+        name: dbUserData.user.name,
+        imgPath: dbUserData.user.imgPath,
+        id: dbUserData.user.id,
         connectionType: "registered",
-        role: dbUserData.role,
-        permissions: dbUserData.permissions,
+        role: dbUserData.user.role,
+        permissions: dbUserData.user.permissions,
       },
     });
+    handleModalClose();
   };
 
   return (

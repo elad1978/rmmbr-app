@@ -23,7 +23,7 @@ function LoginPopUp({ handleModalClose, showModal }) {
         style={{ backgroundColor: "rgba(0, 0, 0, 0)", borderRadius: "25%" }}
       >
         <Modal.Body style={{ borderRadius: "25%" }}>
-          <LogInForm />
+          <LogInForm handleModalClose={handleModalClose} />
           <LogInGoogle />
           <LogInFacebook />
         </Modal.Body>
